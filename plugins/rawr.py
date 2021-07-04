@@ -34,6 +34,7 @@ async def unrar_file(client, message):
             for fil in files:
                 await client.send_document(chat_id=chat,
                                            document=fil)
+            rmtree(tmp_direct)
         except PasswordRequired:
             rmtree(tmp_direct)
             await message.edit("El archivo requiere contraseña")
