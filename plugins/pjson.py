@@ -5,9 +5,13 @@ from pyrogram import Client, filters
 
 load_dotenv()
 COMMANDS_STR = str(os.getenv("COMMANDS"))
+print(COMMANDS_STR)
 COMMANDS = [i for i in COMMANDS_STR.split(" ")]
+print(COMMANDS)
 ADMINS_STR = str(os.getenv("ADMINS"))
+print(ADMINS_STR)
 ADMINS = [int(i) for i in ADMINS_STR.split(" ")]
+print(ADMINS)
 
 
 @Client.on_message(filters.user(ADMINS) & filters.command(["json"], COMMANDS))
