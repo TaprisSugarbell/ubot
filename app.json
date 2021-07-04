@@ -31,7 +31,7 @@
        "description": "Usuarios permitidos",
        "value": "784148805"
      },
-     "COMMAND": {
+     "COMMANDS": {
        "description": "Prefijo/s para el comando (Puedes colocar varios prefijos separados por un espacio)",
        "value": ". !"
      },

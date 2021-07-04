@@ -12,7 +12,6 @@ ADMINS = [int(i) for i in ADMINS_STR.split(" ")]
 
 @Client.on_message(filters.user(ADMINS) & filters.command(["speed"], COMMANDS))
 async def speed(client, message):
-    print(message)
     s = speedtest.Speedtest()
     s.download()
     s.upload()

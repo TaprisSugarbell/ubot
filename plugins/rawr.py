@@ -14,7 +14,6 @@ ADMINS = [int(i) for i in ADMINS_STR.split(" ")]
 
 @Client.on_message(filters.user(ADMINS) & filters.command(["unrar"], COMMANDS))
 async def unrar_file(client, message):
-    print(message)
     tmp_direct = f"./Downloads/{message['from_user']['id']}/"
     if not os.path.isdir(tmp_direct):
         os.makedirs(tmp_direct)
