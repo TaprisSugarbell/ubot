@@ -5,7 +5,7 @@ from pyrogram import Client, filters
 
 load_dotenv()
 COMMANDS_STR = os.getenv("COMMANDS")
-COMMANDS = [i for i in COMMANDS_STR.split(" ")]
+COMMANDS = [i for i in str(COMMANDS_STR).split(" ")]
 ADMINS_STR = os.getenv("ADMINS")
 ADMINS = [int(i) for i in ADMINS_STR.split(" ")]
 
