@@ -33,7 +33,7 @@ async def unrar_file(client, message):
             files = [zip_ + i for i in os.listdir(zip_)]
             for fil in files:
                 recog = await file_recognize(fil)
-                if recog == "photo":
+                if recog == "image":
                     await client.send_photo(chat_id=chat,
                                             photo=fil)
                     await client.send_document(chat_id=chat,

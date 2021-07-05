@@ -10,7 +10,6 @@ async def file_recognize(filename, out="./"):
         "document": documents}
     try:
         ext = filename.split(".")[-1]
-        print(ext)
         if ext in direcs["image"]:
             file_type = "image"
         elif ext in direcs["video"]:
