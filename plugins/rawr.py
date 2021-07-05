@@ -3,12 +3,13 @@ import zipfile
 from shutil import rmtree
 from dotenv import load_dotenv
 from pyrogram import Client, filters
+from helper.files_ import file_recognize
 from rarfile import RarFile, PasswordRequired
 
 load_dotenv()
 COMMANDS_STR = str(os.getenv("COMMANDS"))
 COMMANDS = [i for i in COMMANDS_STR.split(" ")]
-ADMINS_STR = str(os.getenv("ADMINS"))
+ADMINS_STR = os.getenv("ADMINS")
 ADMINS = [int(i) for i in ADMINS_STR.split(" ")]
 
 
@@ -29,10 +30,19 @@ async def unrar_file(client, message):
             RarFile(zip_).extractall(path=tmp_direct, pwd=text)
             os.unlink(zip_)
             zip_ = tmp_direct + os.listdir(tmp_direct)[0] + "/"
-            files = [zip_ + i for i in os.listdir(zip_) if i.endswith(".jpg") or i.endswith(".png")]
+            files = [zip_ + i for i in os.listdir(zip_)]
             for fil in files:
-                await client.send_document(chat_id=chat,
-                                           document=fil)
+                recog = await file_recognize(fil)
+                if recog == "photo":
+                    await client.send_photo(chat_id=chat,
+                                            photo=fil)
+                    await client.send_document(chat_id=chat,
+                                               document=fil)
+                elif recog == "video":
+                    await client.send_video(chat_id=chat,
+                                            video=fil)
+                else:
+                    pass
             rmtree(tmp_direct)
         except PasswordRequired:
             rmtree(tmp_direct)
