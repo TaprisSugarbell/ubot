@@ -37,4 +37,7 @@ async def unrar_file(client, message):
         except PasswordRequired:
             rmtree(tmp_direct)
             await message.edit("El archivo requiere contraseña")
+        except Exception as e:
+            rmtree(tmp_direct)
+            await message.edit(e)
 
