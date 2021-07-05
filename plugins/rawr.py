@@ -41,6 +41,9 @@ async def unrar_file(client, message):
                 elif recog == "video":
                     await client.send_video(chat_id=chat,
                                             video=fil)
+                elif recog == "document":
+                    await client.send_document(chat_id=chat,
+                                               document=fil)
                 else:
                     pass
             rmtree(tmp_direct)
