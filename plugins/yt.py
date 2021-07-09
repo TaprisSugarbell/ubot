@@ -5,6 +5,7 @@ import logging
 from shutil import rmtree
 from dotenv import load_dotenv
 from pydub import AudioSegment
+from plugins.sayu_logs import date
 from pyrogram import Client, filters
 from helper.files_ import file_recognize
 from moviepy.editor import VideoFileClip
@@ -34,7 +35,7 @@ async def convert(filename):
 
 async def upload_video(client, chat, tmp_directory, file, thumb):
     clip = VideoFileClip(file)
-    time_ = clip.duration
+    time_ = int(clip.duration)
     size = clip.size
     height = size[1]
     width = size[0]
@@ -86,37 +87,43 @@ async def yt(client, message):
     chat = message["chat"]["id"]
     command = message["command"][0]
     text = " ".join(message["text"].split(" ")[1:])
-    # tmp_directory = f"./Downloads/{message['from_user']['id']}/{session_random}/"
-    tmp_directory = f"./Downloads/{message['from_user']['id']}/D76bE/"
+    tmp_directory = f"./Downloads/{message['from_user']['id']}/{session_random}/"
+    # tmp_directory = f"./Downloads/{message['from_user']['id']}/D76bE/"
     file = await download_file(text, tmp_directory)
     ftype = await file_recognize(file, tmp_directory)
     try:
-        await generate_screen_shots(file, tmp_directory, 300, 1)
+        if "thumb.jpg" not in os.listdir(tmp_directory):
+            await generate_screen_shots(file, tmp_directory, 300, 1)
         thumb = True
     except Exception as e:
         print(e)
         thumb = False
-    if ftype == "video":
-        if command == "ytf":
-            await upload_document(client, chat, tmp_directory, file, thumb)
-        elif command == "ytb":
-            await upload_video(client, chat, tmp_directory, file, thumb)
-            await upload_document(client, chat, tmp_directory, file, thumb)
-        elif command == "yta":
-            song = await convert(file)
-            await upload_audio(client, chat, tmp_directory, song, thumb)
+    try:
+        if ftype == "video":
+            if command == "ytf":
+                await upload_document(client, chat, tmp_directory, file, thumb)
+            elif command == "ytb":
+                await upload_video(client, chat, tmp_directory, file, thumb)
+                await upload_document(client, chat, tmp_directory, file, thumb)
+            elif command == "yta":
+                song = await convert(file)
+                await upload_audio(client, chat, tmp_directory, song, thumb)
+            else:
+                await upload_video(client, chat, tmp_directory, file, thumb)
+        elif ftype == "image":
+            if command == "ytf":
+                await upload_document(client, chat, tmp_directory, file, thumb)
+            elif command == "ytb":
+                await upload_photo(client, chat, file)
+                await upload_document(client, chat, tmp_directory, file, thumb)
+            else:
+                await upload_photo(client, chat, file)
+        elif ftype == "song":
+            await upload_audio(client, chat, tmp_directory, file, thumb)
         else:
-            await upload_video(client, chat, tmp_directory, file, thumb)
-    elif ftype == "image":
-        if command == "ytf":
             await upload_document(client, chat, tmp_directory, file, thumb)
-        elif command == "ytb":
-            await upload_photo(client, chat, file)
-            await upload_document(client, chat, tmp_directory, file, thumb)
-        else:
-            await upload_photo(client, chat, file)
-    elif ftype == "song":
-        await upload_audio(client, chat, tmp_directory, file, thumb)
-    else:
-        await upload_document(client, chat, tmp_directory, file, thumb)
-    rmtree(tmp_directory)
+        rmtree(tmp_directory)
+    except Exception as e:
+        rmtree(tmp_directory)
+        level = "ERROR"
+        await date(client, level, e)
