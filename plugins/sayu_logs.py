@@ -21,7 +21,7 @@ async def date(client, level="", reason=""):
     await client.send_document(chat_id=CHANNEL_ID,
                                document="./sayu.log",
                                caption=f"#{sss_random}\n"
-                                       f"#{level + str(date_)}\n"
+                                       f"#{level}\n{str(date_)}\n"
                                        f"{str(reason)}")
 
 

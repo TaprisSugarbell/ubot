@@ -124,7 +124,7 @@ def ytdl(function):
             else:
                 _ext = "mp4"
         # Options + Download
-        options = {"format": "bestaudio+bestvideo/best",
+        options = {"format": "best",
                    "outtmpl": out + _title + "." + _ext}
         with youtube_dl.YoutubeDL(options) as ydl:
             ydl.download([url])
