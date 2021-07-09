@@ -1,7 +1,7 @@
 import os
 import random
 import string
-from datetime import datetime
+import datetime
 from dotenv import load_dotenv
 from pyrogram import Client, filters
 
@@ -17,7 +17,10 @@ sss_random = "".join([random.choice(key) for i in range(5)])
 
 
 async def date(client, level="", reason=""):
-    date_ = datetime.now().strftime("%d/%m/%Y %H:%M:%S %p")
+    dft = "%d/%m/%Y %H:%M:%S %p"
+    now = datetime.datetime.now().strftime(dft)
+    diff = datetime.timedelta(hours=6)
+    date_ = datetime.datetime.strptime(now, dft) - diff
     await client.send_document(chat_id=CHANNEL_ID,
                                document="./sayu.log",
                                caption=f"#{sss_random}\n"
