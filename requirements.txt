@@ -1,5 +1,8 @@
 beautifulsoup4
+hachoir
 heroku3
+moviepy
+pydub
 pyrogram~=1.2.9
 python-dotenv~=0.18.0
 rarfile
@@ -7,4 +10,5 @@ requests
 speedtest-cli
 TgCrypto
 unrar
+wget
 youtube_dl

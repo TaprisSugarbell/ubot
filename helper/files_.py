@@ -18,7 +18,8 @@ async def file_recognize(filename, out="./"):
             file_type = "song"
         else:
             file_type = "document"
-    except:
+    except Exception as e:
+        print(e)
         file_type = None
         ext = None
     return file_type
