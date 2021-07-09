@@ -18,10 +18,16 @@ async def scrap(client, message):
     text = " ".join(message["text"].split(" ")[1:])
     config = text.split("|")
     url = config[0]
+    # if "http" not in url:
+    #     url = "https://" + url
     regex = False
     if "|" in text:
         regex = config[1]
-    r = requests.get(url).content
+    try:
+        r = requests.get(url).content
+    except requests.exceptions.MissingSchema as e:
+        index = re.search(r"http[\w]{0,1000}", e.args[0]).start()
+        r = requests.get(e.args[0][index:-1]).content
     soup = BeautifulSoup(r, "html.parser")
     # ht = re.findall(r'"https?://[\s]{0,1000}[\S]{0,1000}"', str(r))
     # regexz = [i.replace('"', "") for i in ht]
