@@ -2,6 +2,7 @@ import os
 import random
 import string
 import logging
+from shutil import rmtree
 from dotenv import load_dotenv
 from pydub import AudioSegment
 from pyrogram import Client, filters
@@ -118,3 +119,4 @@ async def yt(client, message):
         await upload_audio(client, chat, tmp_directory, file, thumb)
     else:
         await upload_document(client, chat, tmp_directory, file, thumb)
+    rmtree(tmp_directory)
