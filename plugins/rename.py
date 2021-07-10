@@ -24,17 +24,27 @@ async def rename(client, message):
     key = string.hexdigits
     session_random = "".join([random.choice(key) for i in range(5)])
     tmp_directory = f"./Downloads/{message['from_user']['id']}/{session_random}/"
-    media = message["reply_to_message"]["media"]
+    reply_to = message["reply_to_message"]
+    media =reply_to["media"]
     if media:
         media_ = ["video", "audio", "document", "photo"]
-        files = [message["reply_to_message"][i] for i in media_]
+        files = [reply_to[i] for i in media_]
         file = [i for i in files if i is not None][0]
-        file_id = file["file_id"]
-        file_name = file["file_name"]
+        file_id, file_name = file["file_id"], file["file_name"]
         rute_file = tmp_directory + file_name
         ext = rute_file.split(".")[-1]
-        await client.download_media(file_id, rute_file)
-
+        # Obtener caption
+        caption = reply_to["caption"]
+        if caption is None:
+            caption = ""
+        # Descargar thumb
+        try:
+            thumb = file["thumbs"][0]["file_id"]
+            await client.download_media(thumb, tmp_directory + "thumb.jpg")
+        except TypeError:
+            thumb = None
+        # await client.download_media(file_id, rute_file)
+        # Renombrar
         if text.endswith(ext):
             os.rename(rute_file, tmp_directory + text)
             rut = tmp_directory + text
@@ -52,13 +62,13 @@ async def rename(client, message):
             thumb = False
         try:
             if ftype == "video":
-                await upload_video(client, chat, tmp_directory, rut, thumb)
+                await upload_video(client, chat, tmp_directory, rut, thumb, caption)
             elif ftype == "image":
-                await upload_photo(client, chat, rut)
+                await upload_photo(client, chat, rut, caption)
             elif ftype == "song":
-                await upload_audio(client, chat, tmp_directory, rut, thumb)
+                await upload_audio(client, chat, tmp_directory, rut, thumb, caption)
             else:
-                await upload_document(client, chat, tmp_directory, rut, thumb)
+                await upload_document(client, chat, tmp_directory, rut, thumb, caption)
             rmtree(tmp_directory)
         except Exception as e:
             rmtree(tmp_directory)
