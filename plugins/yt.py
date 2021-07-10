@@ -105,9 +105,10 @@ async def yt(client, message):
         ext = file.split(".")[-1]
         if fil_ename.endswith(ext):
             os.rename(file, tmp_directory + fil_ename)
+            file = tmp_directory + fil_ename
         else:
             os.rename(file, tmp_directory + fil_ename + "." + ext)
-        file = tmp_directory + fil_ename
+            file = tmp_directory + fil_ename + "." + ext
         try:
             caption = strplit[2]
         except IndexError:
