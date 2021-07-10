@@ -45,7 +45,7 @@ async def rename(client, message):
         ftype = await file_recognize(file, tmp_directory)
         try:
             if "thumb.jpg" not in os.listdir(tmp_directory):
-                await generate_screen_shots(file, tmp_directory, 300, 1)
+                await generate_screen_shots(rute_file, tmp_directory, 300, 1)
             thumb = True
         except Exception as e:
             print(e)
