@@ -42,23 +42,23 @@ async def rename(client, message):
             os.rename(rute_file, tmp_directory + text + "." + ext)
             rut = tmp_directory + text + "." + ext
         # Reconocer el archivo
-        ftype = await file_recognize(file, tmp_directory)
+        ftype = await file_recognize(rut, tmp_directory)
         try:
             if "thumb.jpg" not in os.listdir(tmp_directory):
-                await generate_screen_shots(rute_file, tmp_directory, 300, 1)
+                await generate_screen_shots(rut, tmp_directory, 300, 1)
             thumb = True
         except Exception as e:
             print(e)
             thumb = False
         try:
             if ftype == "video":
-                await upload_video(client, chat, tmp_directory, file, thumb)
+                await upload_video(client, chat, tmp_directory, rut, thumb)
             elif ftype == "image":
-                await upload_photo(client, chat, file)
+                await upload_photo(client, chat, rut)
             elif ftype == "song":
-                await upload_audio(client, chat, tmp_directory, file, thumb)
+                await upload_audio(client, chat, tmp_directory, rut, thumb)
             else:
-                await upload_document(client, chat, tmp_directory, file, thumb)
+                await upload_document(client, chat, tmp_directory, rut, thumb)
             rmtree(tmp_directory)
         except Exception as e:
             rmtree(tmp_directory)
