@@ -43,7 +43,7 @@ async def rename(client, message):
             await client.download_media(thumb, tmp_directory + "thumb.jpg")
         except TypeError:
             thumb = None
-        # await client.download_media(file_id, rute_file)
+        await client.download_media(file_id, rute_file)
         # Renombrar
         if text.endswith(ext):
             os.rename(rute_file, tmp_directory + text)
