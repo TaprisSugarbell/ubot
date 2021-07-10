@@ -106,7 +106,7 @@ async def yt(client, message):
         if fil_ename.endswith(ext):
             os.rename(file, tmp_directory + fil_ename)
         else:
-            os.rename(file, tmp_directory + fil_ename + ext)
+            os.rename(file, tmp_directory + fil_ename + "." + ext)
         file = tmp_directory + fil_ename
         try:
             caption = strplit[2]
