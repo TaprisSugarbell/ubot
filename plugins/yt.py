@@ -3,12 +3,11 @@ import random
 import string
 import logging
 from shutil import rmtree
+from helper.utils import *
 from dotenv import load_dotenv
-from pydub import AudioSegment
 from plugins.sayu_logs import date
 from pyrogram import Client, filters
 from helper.files_ import file_recognize
-from moviepy.editor import VideoFileClip
 from helper.download import download_file
 from helper.utils import generate_screen_shots
 
@@ -21,69 +20,6 @@ COMMANDS_STR = str(os.getenv("COMMANDS"))
 COMMANDS = [i for i in COMMANDS_STR.split(" ")]
 ADMINS_STR = os.getenv("ADMINS")
 ADMINS = [int(i) for i in ADMINS_STR.split(" ")]
-
-
-async def convert(filename):
-    if filename[-4:] == "webm":
-        file_ = filename[:-5] + ".mp3"
-    else:
-        file_ = filename[:-4] + ".mp3"
-    aud = AudioSegment.from_file(r"{}".format(filename))
-    aud.export(f"{file_}", format="mp3")
-    return file_
-
-
-async def upload_video(client, chat, tmp_directory, file, thumb, capt=""):
-    clip = VideoFileClip(file)
-    time_ = int(clip.duration)
-    size = clip.size
-    height = size[1]
-    width = size[0]
-    if thumb:
-        await client.send_video(chat_id=chat,
-                                video=file,
-                                thumb=f"{tmp_directory}thumb.jpg",
-                                duration=time_,
-                                height=height,
-                                width=width,
-                                caption=capt)
-    else:
-        await client.send_video(chat_id=chat,
-                                video=file,
-                                duration=time_,
-                                height=height,
-                                width=width,
-                                caption=capt)
-
-
-async def upload_document(client, chat, tmp_directory, file, thumb, capt=""):
-    if thumb:
-        await client.send_document(chat_id=chat,
-                                   document=file,
-                                   thumb=f"{tmp_directory}thumb.jpg",
-                                   caption=capt)
-    else:
-        await client.send_document(chat_id=chat,
-                                   document=file,
-                                   caption=capt)
-
-
-async def upload_photo(client, chat, file, capt=""):
-    await client.send_photo(chat_id=chat,
-                            photo=file,
-                            caption=capt)
-
-
-async def upload_audio(client, chat, tmp_directory, file, thumb, capt=""):
-    if thumb:
-        await client.send_audio(chat_id=chat,
-                                audio=file,
-                                thumb=f"{tmp_directory}thumb.jpg",
-                                caption=capt)
-    else:
-        await client.send_audio(chat_id=chat,
-                                audio=file,
-                                caption=capt)
 
 
 @Client.on_message(filters.user(ADMINS) & filters.command(["yt", "ytf", "yta", "ytb"], COMMANDS))

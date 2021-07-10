@@ -3,7 +3,9 @@ import random
 import asyncio
 import youtube_dl
 from datetime import datetime
+from pydub import AudioSegment
 from hachoir.parser import createParser
+from moviepy.editor import VideoFileClip
 from hachoir.metadata import extractMetadata
 
 
@@ -134,7 +136,67 @@ def ytdl(function):
     return wrapper
 
 
+async def convert(filename):
+    if filename[-4:] == "webm":
+        file_ = filename[:-5] + ".mp3"
+    else:
+        file_ = filename[:-4] + ".mp3"
+    aud = AudioSegment.from_file(r"{}".format(filename))
+    aud.export(f"{file_}", format="mp3")
+    return file_
 
+
+async def upload_video(client, chat, tmp_directory, file, thumb, capt=""):
+    clip = VideoFileClip(file)
+    time_ = int(clip.duration)
+    size = clip.size
+    height = size[1]
+    width = size[0]
+    if thumb:
+        await client.send_video(chat_id=chat,
+                                video=file,
+                                thumb=f"{tmp_directory}thumb.jpg",
+                                duration=time_,
+                                height=height,
+                                width=width,
+                                caption=capt)
+    else:
+        await client.send_video(chat_id=chat,
+                                video=file,
+                                duration=time_,
+                                height=height,
+                                width=width,
+                                caption=capt)
+
+
+async def upload_document(client, chat, tmp_directory, file, thumb, capt=""):
+    if thumb:
+        await client.send_document(chat_id=chat,
+                                   document=file,
+                                   thumb=f"{tmp_directory}thumb.jpg",
+                                   caption=capt)
+    else:
+        await client.send_document(chat_id=chat,
+                                   document=file,
+                                   caption=capt)
+
+
+async def upload_photo(client, chat, file, capt=""):
+    await client.send_photo(chat_id=chat,
+                            photo=file,
+                            caption=capt)
+
+
+async def upload_audio(client, chat, tmp_directory, file, thumb, capt=""):
+    if thumb:
+        await client.send_audio(chat_id=chat,
+                                audio=file,
+                                thumb=f"{tmp_directory}thumb.jpg",
+                                caption=capt)
+    else:
+        await client.send_audio(chat_id=chat,
+                                audio=file,
+                                caption=capt)
 
 
 
