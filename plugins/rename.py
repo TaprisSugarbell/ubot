@@ -57,6 +57,8 @@ async def rename(client, message):
             if "thumb.jpg" not in os.listdir(tmp_directory):
                 await generate_screen_shots(rut, tmp_directory, 300, 1)
             thumb = True
+            if "thumb.jpg" not in os.listdir(tmp_directory):
+                thumb = False
         except Exception as e:
             print(e)
             thumb = False
@@ -74,3 +76,4 @@ async def rename(client, message):
             rmtree(tmp_directory)
             level = "ERROR"
             await date(client, level, e)
+            raise
