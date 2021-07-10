@@ -102,7 +102,7 @@ async def yt(client, message):
     ftype = await file_recognize(file, tmp_directory)
     if len(strplit) > 1:
         fil_ename = strplit[1]
-        os.rename(file, fil_ename)
+        os.rename(file, tmp_directory + fil_ename)
         file = tmp_directory + fil_ename
         try:
             caption = strplit[2]
