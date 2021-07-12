@@ -25,7 +25,7 @@ async def rename(client, message):
     session_random = "".join([random.choice(key) for i in range(5)])
     tmp_directory = f"./Downloads/{message['from_user']['id']}/{session_random}/"
     reply_to = message["reply_to_message"]
-    media =reply_to["media"]
+    media = reply_to["media"]
     if media:
         media_ = ["video", "audio", "document", "photo"]
         files = [reply_to[i] for i in media_]

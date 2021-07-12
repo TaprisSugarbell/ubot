@@ -98,11 +98,14 @@ async def scrap(client, message):
         a = soup.find_all("a")
         alll = [b.get("href") for b in a]
     c = []
-    for i in alll:
-        if i[0] == "/" and host is not None:
-            c.append(host + i)
-        else:
-            c.append(i)
+    try:
+        for i in alll:
+            if i[0] == "/" and host is not None:
+                c.append(host + i)
+            else:
+                c.append(i)
+    except Exception as e:
+        print(e)
     regxx = r"{}".format(regex)
     if regex:
         c = [i for i in c if len(re.findall(regxx, i)) > 0]
